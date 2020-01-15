@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from urllib import parse
+import requests
 
 import scrapy
 from scrapy import Request
@@ -23,4 +24,7 @@ class CnblogsnewsSpider(scrapy.Spider):
 
 
     def parse_detail(self,response):
+        title = response.css("#news_title a::text").extract_first('')
+        create_time = response.css("#news_info .time::text").extract_first('')
+        content = response.css("#news_content .view::text").extract()
         pass
