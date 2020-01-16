@@ -13,7 +13,7 @@ class CnblogsnewsSpider(scrapy.Spider):
     start_urls = ['http://news.cnblogs.com/']
 
     def parse(self, response):
-        post_nodes = response.css("#news_list .content")
+        post_nodes = response.css("#news_list .content")[2:3]
         for post_node in post_nodes:
             img_url = post_node.css(".entry_summary img::attr(src)").extract_first("")
             post_url = post_node.css("h2 a::attr(href)").extract_first("")
@@ -35,8 +35,5 @@ class CnblogsnewsSpider(scrapy.Spider):
         re_match = re.match(".*?(\d+)",response.url)
         if re_match:
             post_id = re_match.group(1)
-            print(parse.urljoin(response.url,"/NewsAjax/GetNextNewsById?contentId={}".format(post_id)))
             html = requests.get(parse.urljoin(response.url,"/NewsAjax/GetNextNewsById?contentId={}".format(post_id)))
             j_data = json.load(html.text)
-            print(j_data)
-            pass
